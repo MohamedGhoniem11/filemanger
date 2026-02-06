@@ -2,7 +2,6 @@
 
 **FileManager Pro** is a production-grade Python application designed for automated file organization, intelligent directory monitoring, and natural language control. It combines a robust background engine with a modern `customtkinter` interface.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.10+-yellow.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows-blue.svg)
 
@@ -25,25 +24,31 @@ The project follows a modular Service-Oriented Architecture (SOA):
 
 ```mermaid
 graph TD
-    UI[GUI Layer (CustomTkinter)] --> Services
-    Services --> Core
-    
+    UI --> SvcHub
+    SvcHub --> Obs
+    SvcHub --> NLP
+    SvcHub --> Health
+
+    Obs --> CoreHub
+    NLP --> CoreHub
+
+    CoreHub --> Org
+    CoreHub --> Classifier
+    CoreHub --> DB
+
     subgraph Services
-        Obs[Observer Service]
-        NLP[NLP Service]
-        Health[Health Service]
+        SvcHub((Services))
+        Obs
+        NLP
+        Health
     end
-    
+
     subgraph Core
-        Org[Organizer]
-        Class[Classifier]
-        DB[(SQLite Index)]
+        CoreHub((Core))
+        Org
+        Classifier
+        DB
     end
-    
-    Obs --> Org
-    Obs --> Class
-    Obs --> DB
-    NLP --> DB
 ```
 
 - **`src/services/`**: Singleton managers (Config, Logger, Observer).
@@ -108,8 +113,3 @@ Developing a filesystem manager for Windows introduced several unique engineerin
 3. Commit changes (`git commit -m 'Add amazing feature'`).
 4. Push to branch (`git push origin feature/amazing-feature`).
 5. Open a Pull Request.
-
----
-
-## 📜 License
-MIT License. See `LICENSE` for more information.
